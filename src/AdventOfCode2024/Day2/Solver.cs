@@ -16,37 +16,38 @@ public class Solver : SolverBase
             Console.WriteLine($"{nameof(matrix)}: {string.Join(' ', matrix.Take(2).SelectMany(t => t))} .. {string.Join(' ', matrix.TakeLast(2).SelectMany(t => t))}");
         }
         
-        var safeReports = new List<int>();
-        var safeWithDampenerReports = new List<int>();
+        var safeReportsWithoutDampener = new List<int>();
+        var safeReportsWithDampener = new List<int>();
         for (int i = 0; i < matrix.Count(); i++)
         {
             IEnumerable<int> levels = matrix[i];
 
-            bool isSafe, isSafeWithDampener;
-            CheckLevels(levels, out isSafe, out isSafeWithDampener);
+            bool isSafeWithoutDampener, isSafeWithDampener;
+            CheckLevels(levels, out isSafeWithoutDampener, out isSafeWithDampener);
 
-            if (isSafe)
+            if (isSafeWithoutDampener)
             {
-                safeReports.Add(i);
+                safeReportsWithoutDampener.Add(i);
             }
 
             if (!isSafeWithDampener)
             {
+                // Covers edge case for when the level to remove is the first one, e.g. 1 9 8 7 6
                 CheckLevels(levels.Reverse(), out _, out isSafeWithDampener);
             }
 
             if (isSafeWithDampener)
             {
-                safeWithDampenerReports.Add(i);
+                safeReportsWithDampener.Add(i);
             }
         }
 
-        return (safeReports.Count(), safeWithDampenerReports.Count());
+        return (safeReportsWithoutDampener.Count(), safeReportsWithDampener.Count());
     }
 
-    private static void CheckLevels(IEnumerable<int> levels, out bool isSafe, out bool isSafeWithDampener)
+    private static void CheckLevels(IEnumerable<int> levels, out bool isSafeWithoutDampener, out bool isSafeWithDampener)
     {
-        isSafe = true;
+        isSafeWithoutDampener = true;
         isSafeWithDampener = true;
         int prevLevel = levels.First();
         int? prevDiff = default;
@@ -61,9 +62,9 @@ public class Solver : SolverBase
                 || (diff * prevDiff) < 0)
             {
 
-                if (isSafe)
+                if (isSafeWithoutDampener)
                 {
-                    isSafe = false;
+                    isSafeWithoutDampener = false;
                     continue;
                 }
                 isSafeWithDampener = false;
