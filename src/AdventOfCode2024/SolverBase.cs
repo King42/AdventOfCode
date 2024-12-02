@@ -26,5 +26,5 @@ public abstract class SolverBase : ISolver
         return await File.ReadAllLinesAsync(FilePath);
     }
 
-    public abstract (string part1, string part2) Solve();
+    public abstract (object part1, object part2) Solve();
 }

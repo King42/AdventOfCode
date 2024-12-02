@@ -7,7 +7,7 @@ public class Solver : SolverBase
     {
     }
 
-    public override (string part1, string part2) Solve()
+    public override (object part1, object part2) Solve()
     {
         List<int> left = new List<int>();
         List<int> right = new List<int>();
@@ -43,6 +43,6 @@ public class Solver : SolverBase
             part2 += i * left.Count(l => l == i) * right.Count(r => r == i);
         }
 
-        return (part1.ToString(), part2.ToString());
+        return (part1, part2);
     }
 }
