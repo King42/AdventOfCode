@@ -7,7 +7,7 @@ public class Solver : SolverBase
     {
     }
 
-    public override (object part1, object part2) Solve()
+    public override (object? part1, object? part2) Solve()
     {
         List<int> left = new List<int>();
         List<int> right = new List<int>();
@@ -35,7 +35,6 @@ public class Solver : SolverBase
         }
 
         var leftDistinct = left.Distinct();
-        var rightDistinct = right.Distinct();
 
         int part2 = 0;
         foreach (var i in leftDistinct)

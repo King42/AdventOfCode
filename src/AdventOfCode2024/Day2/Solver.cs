@@ -7,7 +7,7 @@ public class Solver : SolverBase
     {
     }
 
-    public override (object part1, object part2) Solve()
+    public override (object? part1, object? part2) Solve()
     {
         var matrix = Input.Select(line => line.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(t => int.Parse(t))).ToList();
 

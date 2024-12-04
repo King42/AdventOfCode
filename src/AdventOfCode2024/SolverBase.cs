@@ -1,6 +1,6 @@
 namespace AdventOfCode2024;
 
-public abstract class SolverBase : ISolver
+public class SolverBase : ISolver
 {
     protected readonly bool Debug;
     protected readonly bool UseTestData;
@@ -26,5 +26,5 @@ public abstract class SolverBase : ISolver
         return await File.ReadAllLinesAsync(FilePath);
     }
 
-    public abstract (object part1, object part2) Solve();
+    public virtual (object? part1, object? part2) Solve() => (null, null);
 }
