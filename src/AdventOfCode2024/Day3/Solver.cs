@@ -1,12 +1,13 @@
-using System.Diagnostics;
 using System.Text.RegularExpressions;
 
 namespace AdventOfCode2024.Day3;
 
 public class Solver : SolverBase
 {
-    public Solver(int day, bool debug, bool useTestData)
-        : base(day, debug, useTestData)
+    protected override bool UseTestData => false;
+    protected override bool Debug => false;
+
+    public Solver(int day) : base(day)
     {
     }
 
@@ -20,26 +21,23 @@ public class Solver : SolverBase
 
         var line = string.Join("", Input);
 
-        //foreach (var line in Input)
-        //{
-            part1 += ParseText(line, MulRegex, false);
+        part1 += ParseText(line, MulRegex, false);
 
-            foreach (var chunk in $"do(){line}".Split("don't()", StringSplitOptions.RemoveEmptyEntries))
+        foreach (var chunk in $"do(){line}".Split("don't()", StringSplitOptions.RemoveEmptyEntries))
+        {
+            if (Debug)
+            {
+                Console.WriteLine($"Processing chunk, '{chunk}', ...");
+            }
+            foreach (var partial in chunk.Split("do()").Skip(1))
             {
                 if (Debug)
                 {
-                    Console.WriteLine($"Processing chunk, '{chunk}', ...");
+                    Console.WriteLine($"Processing do() block, '{partial}', ...");
                 }
-                foreach (var partial in chunk.Split("do()").Skip(1))
-                {
-                    if (Debug)
-                    {
-                        Console.WriteLine($"Processing do() block, '{partial}', ...");
-                    }
-                    part2 += ParseText(partial, MulRegex, false);
-                }
+                part2 += ParseText(partial, MulRegex, false);
             }
-        //}
+        }
 
         return (part1, part2);
     }

@@ -1,12 +1,11 @@
-using System.Diagnostics;
-using System.Text.RegularExpressions;
-
 namespace AdventOfCode2024.Day4;
 
 public class Solver : SolverBase
 {
-    public Solver(int day, bool debug, bool useTestData)
-        : base(day, debug, useTestData)
+    protected override bool UseTestData => true;
+    protected override bool Debug => true;
+
+    public Solver(int day) : base(day)
     {
     }
 

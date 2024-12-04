@@ -2,16 +2,14 @@ namespace AdventOfCode2024;
 
 public class SolverBase : ISolver
 {
-    protected readonly bool Debug;
-    protected readonly bool UseTestData;
+    protected virtual bool Debug => false;
+    protected virtual bool UseTestData => false;
     protected readonly int Day;
     protected readonly string[] Input;
     private string FilePath => $@".\Input\Day{Day}{(UseTestData ? ".test" : null)}.txt";
 
-    protected SolverBase(int day, bool debug, bool useTestData)
+    protected SolverBase(int day)
     {
-        Debug = debug;
-        UseTestData = useTestData;
         Day = day;
 
         if (Debug)

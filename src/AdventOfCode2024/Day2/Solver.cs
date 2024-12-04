@@ -2,8 +2,10 @@ namespace AdventOfCode2024.Day2;
 
 public class Solver : SolverBase
 {
-    public Solver(int day, bool debug, bool useTestData)
-        : base(day, debug, useTestData)
+    protected override bool UseTestData => false;
+    protected override bool Debug => false;
+
+    public Solver(int day) : base(day)
     {
     }
 

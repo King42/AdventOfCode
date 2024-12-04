@@ -5,11 +5,8 @@ class Program
     static readonly List<(object? part1, object? part2)> Solutions = new List<(object? part1, object? part2)>() {
         (part1: 1579939, part2: 20351745),
         (part1: 660, part2: 689),
-        // (part1: 184576302, part2: )
+        // (part1: 184576302, part2: 118173507 )
     };
-
-    const bool Debug = true;
-    const bool UseTestData = true;
 
     const int Year = 2024;
 
@@ -25,7 +22,7 @@ class Program
             }
             else
             {
-                solution = SolverFactory.Create(day, Debug, UseTestData).Solve();
+                solution = SolverFactory.Create(day).Solve();
             }
 
             Console.WriteLine($"Day {day}:");
