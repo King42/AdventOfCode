@@ -14,8 +14,8 @@ public class SolverFactory
                 return new Day3.Solver(day);
             case 4:
                 return new Day4.Solver(day);
-            // case 5:
-            //     return new Day5.Solver(day);
+            case 5:
+                return new Day5.Solver(day);
             // case 6:
             //     return new Day6.Solver(day);
             // case 7:
