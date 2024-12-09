@@ -1,3 +1,5 @@
+using AdventOfCodeCore;
+
 using System.Text.RegularExpressions;
 
 namespace AdventOfCode2024.Day3;

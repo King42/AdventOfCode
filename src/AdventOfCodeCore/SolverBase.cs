@@ -1,4 +1,4 @@
-namespace AdventOfCode2024;
+namespace AdventOfCodeCore;
 
 public class SolverBase : ISolver
 {

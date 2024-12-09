@@ -1,4 +1,6 @@
-﻿namespace AdventOfCode2024;
+﻿using AdventOfCodeCore;
+
+namespace AdventOfCode2024;
 
 class Program
 {
@@ -23,7 +25,7 @@ class Program
             }
             else
             {
-                solution = SolverFactory.Create(day).Solve();
+                solution = SolverFactory.Create(Year, day).Solve();
             }
 
             Console.WriteLine($"Day {day}:");

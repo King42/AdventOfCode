@@ -1,4 +1,4 @@
-using System.Globalization;
+using AdventOfCodeCore;
 
 namespace AdventOfCode2024.Day4;
 
