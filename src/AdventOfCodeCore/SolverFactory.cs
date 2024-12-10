@@ -6,7 +6,7 @@ public class SolverFactory
 {
     public static ISolver Create(int year, int day)
     {
-        Type? solverType = Assembly.GetExecutingAssembly().GetType($"AdventOfCode{year}.Day{day}.Solver");
+        Type? solverType = Assembly.GetCallingAssembly().GetType($"AdventOfCode{year}.Day{day}.Solver");
         if (solverType == null)
         {
             throw new NotImplementedException();
