@@ -6,9 +6,9 @@ namespace AdventOfCode2024.Day5;
 public class Solver : SolverBase
 {
     protected override bool UseTestData => false;
-    protected override bool Debug => true;
+    protected override bool Debug => false;
 
-    private readonly Dictionary<int, (bool IsComplete, List<int> Successors)> _part1Rules = new Dictionary<int, (bool, List<int>)>();
+    private readonly List<(int Left, int Right)> _part1Rules = new List<(int, int)>();
     private readonly List<IList<int>> _part1Orders = new List<IList<int>>();
 
     public Solver(int day) : base(day)
@@ -19,16 +19,14 @@ public class Solver : SolverBase
     {
         PopulatePart1Data();
 
-        NormalizePart1Data();
-
         if (Debug)
         {
             Console.WriteLine("Rules");
             var i = 0;
-            foreach (var kvp in _part1Rules)
+            foreach (var tuple in _part1Rules)
             {
                 if (i++ >= 10) break;
-                Console.WriteLine($"{kvp.Key}: {string.Join(' ', kvp.Value.Successors.Select(t => t.ToString()))}");
+                Console.WriteLine($"{tuple.Left}: {tuple.Right}");
             }
 
             Console.WriteLine("Orders");
@@ -78,14 +76,9 @@ public class Solver : SolverBase
     private List<Regex> CompileRulesIntoRegularExpressions()
     {
         var regexes = new List<Regex>();
-        foreach (var kvp in _part1Rules)
+        foreach (var tuple in _part1Rules)
         {
-            if (!kvp.Value.Successors.Any())
-            {
-                continue;
-            }
-
-            var negativePattern = $@"({string.Join('|', kvp.Value.Successors)})(,\d*)*,{kvp.Key}";
+            var negativePattern = $@"({tuple.Right})(,\d*)*,{tuple.Left}";
             if (Debug)
             {
                 Console.WriteLine(negativePattern);
@@ -110,53 +103,12 @@ public class Solver : SolverBase
             var left = int.Parse(parts[0]);
             var right = int.Parse(parts[1]);
 
-            if (!_part1Rules.ContainsKey(left))
-            {
-                _part1Rules.Add(left, (false, new List<int>()));
-            }
-            _part1Rules[left].Successors.Add(right);
+            _part1Rules.Add((left, right));
         }
 
         for (row = row + 1; row < Input.Count(); row++)
         {
             _part1Orders.Add(Input[row].Split(',').Select(int.Parse).ToList());
         }
-    }
-
-    private void NormalizePart1Data()
-    {
-        foreach (var key in _part1Rules.Keys.ToList())
-        {
-            CompleteRule(key);
-        }
-    }
-
-    private void CompleteRule(int key)
-    {
-        if (!_part1Rules.ContainsKey(key))
-        {
-            _part1Rules.Add(key, (true, new List<int>()));
-        }
-
-        var rule = _part1Rules[key];
-
-        if (rule.IsComplete)
-        {
-            return;
-        }
-
-        var completeSuccessors = new List<int>(rule.Successors);
-        foreach (var successorKey in rule.Successors)
-        {
-            CompleteRule(successorKey);
-            var additionalRule = _part1Rules[successorKey];
-            if (!additionalRule.IsComplete)
-            {
-                CompleteRule(successorKey);
-            }
-            completeSuccessors.AddRange(additionalRule.Successors);
-        }
-
-        _part1Rules[key] = (true, completeSuccessors.Distinct().ToList());
     }
 }
