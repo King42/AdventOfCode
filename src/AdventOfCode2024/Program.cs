@@ -25,7 +25,7 @@ class Program
             }
             else
             {
-                solution = SolverFactory.Create(Year, day).Solve();
+                solution = SolverFactory.Create(Year, day)?.Solve() ?? (null, null);
             }
 
             Console.WriteLine($"Day {day}:");

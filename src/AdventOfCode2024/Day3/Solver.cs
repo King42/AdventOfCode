@@ -16,7 +16,7 @@ public class Solver : SolverBase
     public static Regex MulRegex = new Regex(@"mul[(](?<left>\d+),(?<right>\d+)[)]");
     public static Regex ConditionalMulRegex = new Regex(@"(?(do[(][)])do[(][)].*?mul[(](?<left>\d+),(?<right>\d+)[)])");
 
-    public override (object? part1, object? part2) Solve()
+    public override (object? Part1, object? Part2) Solve()
     {
         var part1 = 0L;
         var part2 = 0L;

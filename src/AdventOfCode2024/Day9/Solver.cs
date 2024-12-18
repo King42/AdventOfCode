@@ -11,8 +11,8 @@ public class Solver : SolverBase
     {
     }
 
-    public override (object? part1, object? part2) Solve()
+    public override (object? Part1, object? Part2) Solve()
     {
-        return ("NYI", "NYI");
+        return base.Solve();
     }
 }
