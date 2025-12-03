@@ -1,6 +1,6 @@
 using AdventOfCodeCore;
 
-namespace AdventOfCode2024.Day7;
+namespace AdventOfCode2025.Day7;
 
 public class Solver : SolverBase
 {

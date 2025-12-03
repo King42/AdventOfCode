@@ -1,6 +1,6 @@
 using AdventOfCodeCore;
 
-namespace AdventOfCode2024.Day1;
+namespace AdventOfCode2025.Day1;
 
 public class Solver : SolverBase
 {
@@ -11,41 +11,102 @@ public class Solver : SolverBase
     {
     }
 
-    public override (object? Part1, object? Part2) Solve()
+    public override (object? Part1, object? Part2) Solve() => (SolvePart1(), SolvePart2());
+
+    public object SolvePart1()
     {
-        List<int> left = new List<int>();
-        List<int> right = new List<int>();
+        int count = 0;
+        
+        int val = 50;
+        foreach (var line in Input)
+        {
+            val = val + ParseLine(line);
+            val = val % 100;
+
+            if (val == 0)
+            {
+                count++;
+            }
+        }
+        
+        return count;
+    }
+
+    public object SolvePart2()
+    {
+        var answer = 0;
+
+        var l = new LinkedList<int>(Enumerable.Range(0, 100));
+        var currentNode = l.Find(50);
 
         foreach (var line in Input)
         {
-            var parts = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            left.Add(int.Parse(parts[0]));
-            right.Add(int.Parse(parts[1]));
+            int moveBy = ParseLine(line);
+            if (moveBy > 0)
+            {
+                for (int i = 0; i < moveBy; i++)
+                {
+                    currentNode = NextCircular(currentNode);
+                    if (currentNode.Value == 0)
+                    {
+                        answer++;
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < -moveBy; i++)
+                {
+                    currentNode = PreviousCircular(currentNode);
+                    if (currentNode.Value == 0)
+                    {
+                        answer++;
+                    }
+                }
+            }
+
+            if (Debug)
+            {
+                Console.WriteLine($"{line} : {currentNode.Value} : {answer}");
+            }
         }
 
-        left.Sort();
-        right.Sort();
+        return answer;
+    }
 
-        if (Debug)
+    public static LinkedListNode<int> NextCircular(LinkedListNode<int> node)
+    {
+        if (node.Next != null)
         {
-            Console.WriteLine($"{nameof(left)}: {string.Join(' ', left.Take(5))} .. {string.Join(' ', left.TakeLast(5))}");
-            Console.WriteLine($"{nameof(right)}: {string.Join(' ', right.Take(5))} .. {string.Join(' ', right.TakeLast(5))}");
+            return node.Next;
         }
+        else
+        {
+            return node.List!.First!;
+        }
+    }
+
+    public static LinkedListNode<int> PreviousCircular(LinkedListNode<int> node)
+    {
+        if (node.Previous != null)
+        {
+            return node.Previous;
+        }
+        else
+        {
+            return node.List!.Last!;
+        }
+    }
+
+    public static int ParseLine(string line)
+    {
+        int addend = int.Parse(line.Substring(1, line.Length - 1));
         
-        int part1 = 0;
-        for (int i = 0; i < left.Count; i++)
+        if (line.StartsWith('L'))
         {
-            part1 += Math.Abs(right[i] - left[i]);
+            addend = -1 * addend;
         }
 
-        var leftDistinct = left.Distinct();
-
-        int part2 = 0;
-        foreach (var i in leftDistinct)
-        {
-            part2 += i * left.Count(l => l == i) * right.Count(r => r == i);
-        }
-
-        return (part1, part2);
+        return addend;
     }
 }

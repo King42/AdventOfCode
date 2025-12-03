@@ -1,8 +1,6 @@
 using AdventOfCodeCore;
 
-using System.Text.RegularExpressions;
-
-namespace AdventOfCode2024.Day3;
+namespace AdventOfCode2025.Day3;
 
 public class Solver : SolverBase
 {
@@ -13,51 +11,45 @@ public class Solver : SolverBase
     {
     }
 
-    public static Regex MulRegex = new Regex(@"mul[(](?<left>\d+),(?<right>\d+)[)]");
-    public static Regex ConditionalMulRegex = new Regex(@"(?(do[(][)])do[(][)].*?mul[(](?<left>\d+),(?<right>\d+)[)])");
+    public override (object? Part1, object? Part2) Solve() => (SolvePart1(), SolvePart2());
 
-    public override (object? Part1, object? Part2) Solve()
+    private object? SolvePart1()
     {
-        var part1 = 0L;
-        var part2 = 0L;
-
-        var line = string.Join("", Input);
-
-        part1 += ParseText(line, MulRegex, false);
-
-        foreach (var chunk in $"do(){line}".Split("don't()", StringSplitOptions.RemoveEmptyEntries))
+        long total = 0;
+        
+        foreach (var line in Input)
         {
-            if (Debug)
-            {
-                Console.WriteLine($"Processing chunk, '{chunk}', ...");
-            }
-            foreach (var partial in chunk.Split("do()").Skip(1))
-            {
-                if (Debug)
-                {
-                    Console.WriteLine($"Processing do() block, '{partial}', ...");
-                }
-                part2 += ParseText(partial, MulRegex, false);
-            }
+            total += GetJoltage(line);
         }
 
-        return (part1, part2);
+        return total;
     }
 
-    private static long ParseText(string? input, Regex mulRegex, bool debug)
+    private object? SolvePart2()
     {
-        var sum = 0L;
-        foreach (Match match in mulRegex.Matches(input ?? ""))
+        long total = 0;
+        
+        foreach (var line in Input)
         {
-            if (debug)
-            {
-                Console.WriteLine($"Match '{match.Value}' at index {match.Index}");
-            }
-
-            var left = int.Parse(match.Groups["left"].Value);
-            var right = int.Parse(match.Groups["right"].Value);
-            sum += left * right;
+            total += GetJoltage(line, 12);
         }
-        return sum;
+
+        return total;
+    }
+
+    private long GetJoltage(string line, int numOfBatteries = 2)
+    {
+        long joltage = 0;
+        var batteries = line.Select(t => t - '0').ToList();
+        if (Debug) Console.WriteLine($"Batteries: {string.Join(",", batteries)} =>");
+        for (int i = numOfBatteries - 1; i >= 0; i--)
+        {
+            int val = batteries.SkipLast(i).Max();
+            joltage = joltage * 10 + val;
+            int firstIndex = batteries.IndexOf(val);
+            batteries.RemoveRange(0, firstIndex + 1);
+        }
+        if (Debug) Console.WriteLine($"   Joltage: {joltage}");
+        return joltage;
     }
 }

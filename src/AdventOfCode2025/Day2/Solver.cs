@@ -1,82 +1,104 @@
 using AdventOfCodeCore;
 
-namespace AdventOfCode2024.Day2;
+namespace AdventOfCode2025.Day2;
 
 public class Solver : SolverBase
 {
     protected override bool UseTestData => false;
-    protected override bool Debug => false;
+    protected override bool Debug => true;
 
     public Solver(int day) : base(day)
     {
     }
 
-    public override (object? Part1, object? Part2) Solve()
-    {
-        var matrix = Input.Select(line => line.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(t => int.Parse(t))).ToList();
+    public override (object? Part1, object? Part2) Solve() => (SolvePart1(), SolvePart2());
 
+    private object? SolvePart1()
+    {
+        Int64 sum = 0;
+
+        var ranges = GetRanges().OrderBy(r => r.Start);
+
+        /*
         if (Debug)
         {
-            Console.WriteLine($"{nameof(matrix)}: {string.Join(' ', matrix.Take(2).SelectMany(t => t))} .. {string.Join(' ', matrix.TakeLast(2).SelectMany(t => t))}");
+            foreach (var range in ranges)
+            {
+                    Console.WriteLine($"{range.Start}-{range.End}");
+            }
         }
-        
-        var safeReportsWithoutDampener = new List<int>();
-        var safeReportsWithDampener = new List<int>();
-        for (int i = 0; i < matrix.Count(); i++)
+        */
+
+        foreach (var palindrome in GetSequences(ranges.Last().End, 2))
         {
-            IEnumerable<int> levels = matrix[i];
-
-            bool isSafeWithoutDampener, isSafeWithDampener;
-            CheckLevels(levels, out isSafeWithoutDampener, out isSafeWithDampener);
-
-            if (isSafeWithoutDampener)
-            {
-                safeReportsWithoutDampener.Add(i);
-            }
-
-            if (!isSafeWithDampener)
-            {
-                // Covers edge case for when the level to remove is the first one, e.g. 1 9 8 7 6
-                CheckLevels(levels.Reverse(), out _, out isSafeWithDampener);
-            }
-
-            if (isSafeWithDampener)
-            {
-                safeReportsWithDampener.Add(i);
-            }
+            if (ranges.Any(r => r.Start <= palindrome && r.End >= palindrome))
+                sum += palindrome;
         }
 
-        return (safeReportsWithoutDampener.Count(), safeReportsWithDampener.Count());
+        return sum;
     }
 
-    private static void CheckLevels(IEnumerable<int> levels, out bool isSafeWithoutDampener, out bool isSafeWithDampener)
+    private object? SolvePart2()
     {
-        isSafeWithoutDampener = true;
-        isSafeWithDampener = true;
-        int prevLevel = levels.First();
-        int? prevDiff = default;
+        Int64 sum = 0;
 
-        foreach (var level in levels.Skip(1))
+        var ranges = GetRanges().OrderBy(r => r.Start);
+
+        foreach (var palindrome in GetSequences(ranges.Last().End))
         {
-            var diff = level - prevLevel;
-
-            if (diff < -3
-                || diff == 0
-                || diff > 3
-                || (diff * prevDiff) < 0)
-            {
-
-                if (isSafeWithoutDampener)
-                {
-                    isSafeWithoutDampener = false;
-                    continue;
-                }
-                isSafeWithDampener = false;
-                break;
-            }
-
-            prevLevel = level;
-            prevDiff = diff;
+            if (ranges.Any(r => r.Start <= palindrome && r.End >= palindrome))
+                sum += palindrome;
         }
+
+        return sum;
+    }
+
+    private List<(Int64 Start, Int64 End)> GetRanges()
+    {
+        var ranges = new List<(Int64 Start, Int64 End)>();
+
+        foreach (var line in Input)
+        {
+            foreach (var section in line.Split(',', StringSplitOptions.RemoveEmptyEntries))
+            {
+                var parts = section.Split('-');
+                var start = Int64.Parse(parts[0]);
+                var end = Int64.Parse(parts[1]);
+                ranges.Add((start, end));
+            }
+        }
+
+        return ranges;
+    }
+
+    private List<Int64> GetSequences(Int64 max, int? maxRepetitions = null)
+    {
+        var sequences = new List<Int64>();
+
+        #pragma warning disable S1994
+        var maxStrLength = max.ToString().Length;
+        for (Int64 i = 1; i.ToString().Length <= maxStrLength / 2; i++)
+        {
+            var numAsStr = $"{i}";
+            for (int j = 2; (!maxRepetitions.HasValue || j <= maxRepetitions) && j * numAsStr.Length <= maxStrLength; j++)
+            {
+                var sequence = Int64.Parse(String.Join(null, Enumerable.Repeat(numAsStr, j)));
+                if (sequence > max)
+                {
+                    break;
+                }
+
+                if (!sequences.Contains(sequence))
+                {
+                    sequences.Add(sequence);
+                    //if (Debug) Console.WriteLine($"{sequence} added");
+                }
+            }
+        }
+        #pragma warning restore S1994
+
+        if (Debug) Console.WriteLine($"Generated {sequences.Count} sequences up to {max}");
+
+        return sequences;
     }
 }
