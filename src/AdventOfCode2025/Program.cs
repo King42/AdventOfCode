@@ -8,6 +8,8 @@ class Program
         (part1: 1026, part2: 5923),
         (part1: 30608905813, part2: 31898925685),
         (part1: 17100, part2: 170418192256861),
+        (part1: 1537, part2: 8707),
+        (part1: 661, part2: 359526404143208)
     };
 
     const int Year = 2025;
