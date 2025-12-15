@@ -8,7 +8,7 @@ public class SolverBase : ISolver
     protected virtual bool UseTestData => false;
     protected readonly int Day;
     protected readonly string[] Input;
-    private string FilePath => $@".\Input\Day{Day}{(UseTestData ? ".test" : null)}.txt";
+    protected string FilePath => $@".\Input\Day{Day}{(UseTestData ? ".test" : null)}.txt";
 
     protected SolverBase(int day)
     {

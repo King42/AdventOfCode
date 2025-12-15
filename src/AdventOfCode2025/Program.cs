@@ -9,18 +9,19 @@ class Program
         (part1: 30608905813, part2: 31898925685),
         (part1: 17100, part2: 170418192256861),
         (part1: 1537, part2: 8707),
-        (part1: 661, part2: 359526404143208)
+        (part1: 661, part2: 359526404143208),
+        (part1: 4387670995909, part2: 9625320374409)
     };
 
     const int Year = 2025;
 
     static void Main(string[] args)
     {
-        var maxDays = DateTime.Today.Year == Year && DateTime.Today.Month == 12 ? DateTime.Today.Day : 12;
+        var maxDays = Math.Min(DateTime.Today.Year == Year && DateTime.Today.Month == 12 ? DateTime.Today.Day : 31, 12);
         for (int day = 1; day <= maxDays; day++)
         {
             (object? part1, object? part2) solution;            
-            if (Solutions.Count() >= day)
+            if (Solutions.Count >= day)
             {
                 solution = Solutions[day - 1];
             }
