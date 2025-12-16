@@ -2,6 +2,7 @@ namespace AdventOfCodeCore.Collections;
 
 public class LinkedGridNode<T>
 {
+    public (int X, int Y) Position { get; set; }
     public T Value { get; set; }
     public bool IncludeDiagonals { get; set; } = false;
     public bool Visited { get; set; } = false;

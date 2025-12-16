@@ -75,6 +75,7 @@ public class LinkedGrid<T> : IEnumerable<LinkedGridNode<T>>
             {
                 tail.Right = newNode;
                 newNode.Left = tail;
+                newNode.Position = (tail.Position.X + 1, tail.Position.Y);
 
                 var previousRowNode = tail.Up?.Right;
                 if (previousRowNode != null)
@@ -109,12 +110,15 @@ public class LinkedGrid<T> : IEnumerable<LinkedGridNode<T>>
             {
                 previousNodeInRow.Right = newNode;
                 newNode.Left = previousNodeInRow;
+                newNode.Position = (previousNodeInRow.Position.X + 1, previousNodeInRow.Position.Y);
             }
 
             if (previousRowNode != null)
             {
                 previousRowNode.Down = newNode;
                 newNode.Up = previousRowNode;
+                newNode.Position = (newNode.Position.X, previousRowNode.Position.Y + 1);
+
                 previousRowNode = previousRowNode.Right;
             }
 
